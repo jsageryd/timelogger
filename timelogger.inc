@@ -85,7 +85,7 @@ _log_cmd_unstart(){
       tmp=$(head -$((linecount - 1)) $logfile)
       echo "$tmp" > $logfile
     fi
-    echo "${last/RUNNING/CANCELLED}"
+    echo -e "${last/\[RUNNING\]/\033[1;31m[CANCELLED]\033[0m}"
   else
     echo "No timer running."
   fi
@@ -103,7 +103,7 @@ _log_cmd_stop(){
     else
       logfile=$(_log_file $log)
       echo -e "$seconds\tSTOP\t$log" >> $logfile
-      echo "$(_log_cmd_last $log) [STOPPED]"
+      echo -e "$(_log_cmd_last $log) \033[1;31m[STOPPED]\033[0m"
     fi
   else
     echo "No timer running."
@@ -224,7 +224,7 @@ _log_cmd_show(){
       fstartdate=$(echo $fstarttime | cut -f 1 -d ' ')
       if $grep; then
         if echo "$startcomment" | grep -qi "$grepstr"; then
-          echo -e "[$log] $fstarttime - $fstoptime ($fdelta)\t$startcomment"
+          echo -e "\033[0;37m[$log] \033[0;34m$fstarttime - $fstoptime ($fdelta) \033[0;36m$startcomment\033[0m"
         else
           let sum-=$delta
         fi
@@ -232,13 +232,13 @@ _log_cmd_show(){
         if [ "$fstartdate" != "$flaststartdate" ]; then
           if [ $(($dailysum - $delta)) -ne 0 ]; then
             fdailysum=$(_log_format_delta $dailysum)
-            echo "This day: $fdailysum"
+            echo -e "  \033[1;37mThis day: $fdailysum\033[0m"
             dailysum=0
           fi
           [ -z "$flaststartdate" ] || echo
-          echo -e "$fstartdate\n----------"
+          echo "$fstartdate"
         fi
-        echo -e "[$log] $fstarttime - $fstoptime ($fdelta)\t$startcomment"
+        echo -e "  \033[0;37m[$log] \033[0;34m$fstarttime - $fstoptime ($fdelta) \033[0;36m$startcomment\033[0m"
       fi
       flaststartdate="$fstartdate"
     fi
@@ -253,12 +253,12 @@ _log_cmd_show(){
     fnow=$(date -jr $now "+%H:%M")
     if $grep; then
       if echo "$startcomment" | grep -qi "$grepstr"; then
-        echo -e "[$log] $fstarttime - $fnow ($fdelta)\t$startcomment [RUNNING]"
+        echo -e "\033[0;37m[$log] \033[0;34m$fstarttime - $fnow ($fdelta) \033[0;36m$startcomment \033[1;32m[RUNNING]\033[0m"
       else
         let sum-=$delta
       fi
     else
-      echo -e "[$log] $fstarttime - $fnow ($fdelta)\t$startcomment [RUNNING]"
+      echo -e "  \033[0;37m[$log] \033[0;34m$fstarttime - $fnow ($fdelta) \033[0;36m$startcomment \033[1;32m[RUNNING]\033[0m"
     fi
   fi
   if [ $lines -eq 0 ]; then
@@ -271,7 +271,7 @@ _log_cmd_show(){
   else
     if ! $grep; then
       fdailysum=$(_log_format_delta $dailysum)
-      echo "This day: $fdailysum"
+      echo -e "  \033[1;37mThis day: $fdailysum\033[0m"
       echo
     fi
     echo "--------------------"
