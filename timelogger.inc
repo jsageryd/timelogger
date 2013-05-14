@@ -172,7 +172,7 @@ _log_cmd_status(){
 }
 
 _log_cmd_list(){
-  ls "$TIMELOGDIR"
+  find "$TIMELOGDIR" -depth 1 -type f -exec basename {} \;
 }
 
 _log_cmd_raw(){
