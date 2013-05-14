@@ -412,7 +412,7 @@ _log_sort(){
   _log_exists $log || return 1
   if _log_isvalid $log; then
     logfile=$(_log_file $log)
-    tmp=$(sort -k 1 $logfile)
+    tmp=$(sort -nk 1 $logfile)
     echo "$tmp" > $logfile
   else
     echo -e "[$log] There are conflicting entries in the log. Log entries will not be sorted."
@@ -430,7 +430,7 @@ _log_sort(){
 _log_isvalid(){
   _log_ne $1 || return 1
   logfile=$(_log_file $1)
-  tmp=$(sort -k 1 $logfile)
+  tmp=$(sort -nk 1 $logfile)
   unset last
   IFS=$'\n'
   for line in $(echo "$tmp"); do
