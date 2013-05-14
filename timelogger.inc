@@ -195,6 +195,7 @@ _log_cmd_show(){
     return 1
   fi
   sum=0
+  dailysum=0
   lines=0
   flaststartdate=''
   grep=false
@@ -216,6 +217,7 @@ _log_cmd_show(){
       stoptime=$(echo "$line" | cut -f 1)
       delta=$((stoptime - starttime))
       let sum+=$delta
+      let dailysum+=$delta
       fdelta=$(_log_format_delta $delta)
       fstarttime=$(date -jr $starttime "+%Y-%m-%d %H:%M")
       fstoptime=$(date -jr $stoptime "+%H:%M")
@@ -228,6 +230,11 @@ _log_cmd_show(){
         fi
       else
         if [ "$fstartdate" != "$flaststartdate" ]; then
+          if [ $(($dailysum - $delta)) -ne 0 ]; then
+            fdailysum=$(_log_format_delta $dailysum)
+            echo "This day: $fdailysum"
+            dailysum=0
+          fi
           [ -z "$flaststartdate" ] || echo
           echo -e "$fstartdate\n----------"
         fi
@@ -240,6 +247,7 @@ _log_cmd_show(){
     now=$(_log_seconds)
     delta=$((now - starttime))
     let sum+=$delta
+    let dailysum+=$delta
     fdelta=$(_log_format_delta $delta)
     fstarttime=$(date -jr $starttime "+%Y-%m-%d %H:%M")
     fnow=$(date -jr $now "+%H:%M")
@@ -261,6 +269,11 @@ _log_cmd_show(){
     fi
     return 1
   else
+    if ! $grep; then
+      fdailysum=$(_log_format_delta $dailysum)
+      echo "This day: $fdailysum"
+      echo
+    fi
     echo "--------------------"
     fsum=$(_log_format_delta $sum)
     echo "Total: $fsum"
@@ -272,7 +285,7 @@ _log_cmd_last(){
   _log_ne $1 || return 1
   show=$(_log_cmd_show $1)
   if [ $? -eq 0 ]; then
-    last=$(echo "$show" | tail -3 | head -1)
+    last=$(echo "$show" | tail -5 | head -1)
     echo $last
     return 0
   else
