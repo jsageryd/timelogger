@@ -217,7 +217,6 @@ _log_cmd_show(){
       stoptime=$(echo "$line" | cut -f 1)
       delta=$((stoptime - starttime))
       let sum+=$delta
-      let dailysum+=$delta
       fdelta=$(_log_format_delta $delta)
       fstarttime=$(date -jr $starttime "+%Y-%m-%d %H:%M")
       fstoptime=$(date -jr $stoptime "+%H:%M")
@@ -230,7 +229,7 @@ _log_cmd_show(){
         fi
       else
         if [ "$fstartday" != "$flaststartday" ]; then
-          if [ $(($dailysum - $delta)) -ne 0 ]; then
+          if [ $dailysum -ne 0 ]; then
             fdailysum=$(_log_format_delta $dailysum)
             echo -e "  \033[1;37mThis day: $fdailysum\033[0m"
             dailysum=0
@@ -239,6 +238,7 @@ _log_cmd_show(){
           echo "$fstartday"
         fi
         echo -e "  \033[0;37m[$log] \033[0;34m$fstarttime - $fstoptime ($fdelta) \033[0;36m$startcomment\033[0m"
+        let dailysum+=$delta
       fi
       flaststartday="$fstartday"
     fi
