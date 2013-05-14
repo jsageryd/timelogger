@@ -295,20 +295,20 @@ _log_cmd_last(){
 
 _log_cmd_help(){
   echo
-  echo -e " log \033[34minit\033[0m <log>              creates a new log for <log>"
-  echo -e " log \033[34mdestroy\033[0m <log>           destroys the log for <log>"
-  echo -e " log \033[34mstart\033[0m <log> <comment>   starts the timer for <log>"
-  echo -e " log \033[34munstart\033[0m                 stops any running timer without recording the time"
-  echo -e " log \033[34mstop\033[0m                    stops any running timer and records the time"
-  echo -e " log \033[34mmanual\033[0m                  manual log entry"
-  echo -e " log \033[34mstatus\033[0m                  shows status for all timers"
-  echo -e " log \033[34mlist\033[0m                    lists all log files"
-  echo -e " log \033[34mraw\033[0m <log>               shows the raw log entries for <log>"
-  echo -e " log \033[34mshow\033[0m <log> [grepstr]    shows the log entries for <log>, optionally filtered by [grepstr]"
-  echo -e " log \033[34mlast\033[0m <log>              shows the last log entry for <log>"
-  echo -e " log \033[34mhelp\033[0m                    shows this information"
-  echo -e " log \033[34msettings\033[0m                show settings"
-  echo -e " log \033[34medit\033[0m <log>              opens <log> for manual editing"
+  echo -e " log \033[0;34minit\033[0m <log>              creates a new log for <log>"
+  echo -e " log \033[0;34mdestroy\033[0m <log>           destroys the log for <log>"
+  echo -e " log \033[0;34mstart\033[0m <log> <comment>   starts the timer for <log>"
+  echo -e " log \033[0;34munstart\033[0m                 stops any running timer without recording the time"
+  echo -e " log \033[0;34mstop\033[0m                    stops any running timer and records the time"
+  echo -e " log \033[0;34mmanual\033[0m                  manual log entry"
+  echo -e " log \033[0;34mstatus\033[0m                  shows status for all timers"
+  echo -e " log \033[0;34mlist\033[0m                    lists all log files"
+  echo -e " log \033[0;34mraw\033[0m <log>               shows the raw log entries for <log>"
+  echo -e " log \033[0;34mshow\033[0m <log> [grepstr]    shows the log entries for <log>, optionally filtered by [grepstr]"
+  echo -e " log \033[0;34mlast\033[0m <log>              shows the last log entry for <log>"
+  echo -e " log \033[0;34mhelp\033[0m                    shows this information"
+  echo -e " log \033[0;34msettings\033[0m                show settings"
+  echo -e " log \033[0;34medit\033[0m <log>              opens <log> for manual editing"
   echo
 }
 
