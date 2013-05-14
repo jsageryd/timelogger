@@ -197,7 +197,7 @@ _log_cmd_show(){
   sum=0
   dailysum=0
   lines=0
-  flaststartdate=''
+  flaststartday=''
   grep=false
   if [ ! -z "$2" ]; then
     grep=true
@@ -221,7 +221,7 @@ _log_cmd_show(){
       fdelta=$(_log_format_delta $delta)
       fstarttime=$(date -jr $starttime "+%Y-%m-%d %H:%M")
       fstoptime=$(date -jr $stoptime "+%H:%M")
-      fstartdate=$(echo $fstarttime | cut -f 1 -d ' ')
+      fstartday=$(date -jr $starttime "+%Y-%m-%d %A")
       if $grep; then
         if echo "$startcomment" | grep -qi "$grepstr"; then
           echo -e "\033[0;37m[$log] \033[0;34m$fstarttime - $fstoptime ($fdelta) \033[0;36m$startcomment\033[0m"
@@ -229,18 +229,18 @@ _log_cmd_show(){
           let sum-=$delta
         fi
       else
-        if [ "$fstartdate" != "$flaststartdate" ]; then
+        if [ "$fstartday" != "$flaststartday" ]; then
           if [ $(($dailysum - $delta)) -ne 0 ]; then
             fdailysum=$(_log_format_delta $dailysum)
             echo -e "  \033[1;37mThis day: $fdailysum\033[0m"
             dailysum=0
           fi
-          [ -z "$flaststartdate" ] || echo
-          echo "$fstartdate"
+          [ -z "$flaststartday" ] || echo
+          echo "$fstartday"
         fi
         echo -e "  \033[0;37m[$log] \033[0;34m$fstarttime - $fstoptime ($fdelta) \033[0;36m$startcomment\033[0m"
       fi
-      flaststartdate="$fstartdate"
+      flaststartday="$fstartday"
     fi
   done < $logfile
   if _log_running $log && [ $lines -gt 0 ]; then
